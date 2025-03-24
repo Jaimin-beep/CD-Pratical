@@ -1,0 +1,41 @@
+#include <stdio.h>
+#include <string.h>
+
+static char c[100];  
+int input = 0;       
+
+void E(), EPRIME();
+
+int main() {
+    printf("Enter a String: ");
+    scanf("%s", c);
+
+    E();
+
+    if (c[input] == '\0')  
+        printf("Valid String\n");
+    else
+        printf("Invalid String\n");
+
+    return 0;
+}
+
+void E() {
+    if (c[input] == 'i') {  // Expect an identifier
+        input++;
+        EPRIME();
+    }
+}
+
+void EPRIME() {
+    if (c[input] == '+') {  // Expect a plus operator
+        input++;
+        if (c[input] == 'i') {  // Expect another identifier
+            input++;
+            EPRIME();
+        } else {
+            printf("Invalid String\n");
+            exit(0);
+        }
+    }
+}

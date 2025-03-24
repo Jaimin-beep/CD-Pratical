@@ -1,0 +1,62 @@
+HELLO.L
+%{
+#include "y.tab.h"
+int yyerror(char *errormsg);
+%}
+
+%%
+
+("hi"|"oi")"\n"    { return HI; }
+("tchau"|"bye")"\n" { return BYE; }
+.                   { yyerror("Unknown char"); }
+
+%%
+
+int main(void) {
+    yyparse();
+    return 0;
+}
+
+int yywrap(void) {
+    return 1;
+}
+
+int yyerror(char *errormsg) {
+    fprintf(stderr, "%s\n", errormsg);
+    exit(1);
+}
+HELLO.Y
+%{
+#include <stdio.h>
+#include <stdlib.h>
+
+int yylex(void);
+int yyerror(const char *s);
+%}
+
+%token HI BYE
+
+%%
+
+program:
+    hi bye
+    ;
+
+hi:
+    HI { printf("Hello World\n"); }
+    ;
+
+bye:
+    BYE { printf("Bye World\n"); exit(0); }
+    ;
+
+%%
+
+int main(void) {
+    return yyparse();
+}
+
+int yyerror(const char *s) {
+    fprintf(stderr, "Error: %s\n", s);
+    return 1;
+}
